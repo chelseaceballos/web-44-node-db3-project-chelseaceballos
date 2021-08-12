@@ -12,11 +12,20 @@ function find() { // EXERCISE A
       LEFT JOIN steps as st
           ON sc.scheme_id = st.scheme_id
       GROUP BY sc.scheme_id
-      ORDER BY sc.scheme_id ASC;
+      ORDER BY sc.scheme_id ASC; // doesn't really affect order of the data if removed
 
     2A- When you have a grasp on the query go ahead and build it in Knex.
     Return from this function the resulting dataset.
   */
+  // my first attempt before watching solution video
+  // return db('schemes as sc').leftJoin('steps as st')/.on/('sc.scheme_id', 'st.scheme_id').group('sc.scheme_id')
+
+  return db('schemes as sc')
+  .leftJoin('steps as st', "sc.scheme_id", "st.scheme_id")
+  .select('sc.*') // -here- looks like {"scheme_id" and "scheme_name"}
+  .count('st.step_id as number_of_steps')
+  .groupBy('sc.scheme_id') // - here - collapses data , more handle-able
+
 }
 
 function findById(scheme_id) { // EXERCISE B
